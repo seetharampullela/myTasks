@@ -12,30 +12,28 @@
         display: inline-flex;
         width: 100px;
       }
-    </style>
-    <style>
+      .comment {
+        position: relative;
+        left: 105px;
+        color: tomato;
+      }
       input {
         border: 2px solid black;
         width: 300px;
         height: 20px;
+        vertical-align: middle;
       }
-    </style>
-    <style>
       select {
         border: 2px solid red;
         width: 300px;
         border-radius: 0px;
         height: 30px;
       }
-    </style>
-    <style>
       #idInput {
         border: 2px solid red;
         width: 300px;
         height: 20px;
       }
-    </style>
-    <style>
       button {
         border: 2px solid black;
         width: 300px;
@@ -88,6 +86,8 @@
     <h1>My Tasks</h1>
     <label for="idInput" id="label">Task Card Id</label>
     <input type="text" id="idInput" placeholder="Enter Task Card Id" />
+    <br />
+    <span class="comment">Please enter only User Assigned Task Card Id</span>
     <br /><br />
     <label for="actionSelect" id="label">Action:</label>
     <select id="actionSelect">
@@ -102,34 +102,13 @@
     <strong
       >Note:
       <span>
-        If the environment field is not supplied it will be defaulted to
+        If the environment field is not supplied, it will be defaulted to
         QAJBWF15
       </span></strong
     >
     <br /><br />
     <button onclick="handleSubmit()">Submit</button>
     <br /><br />
-
     <div id="generatedLinkContainer"></div>
-    <!-- <h3>Native Navigation to ETC Task Card Tab</h3>
-    <div>
-      <a
-        href="emxapp://EMX DEV/offline/xl/esTaskExecution/routineWorkTaskCard.ajax?service_lookup=initialize&/taskCardRoot/taskCard/@taskCardId=402881af9c245871019c2461a03e0153&/EMX_OFFLINE=true"
-        >78L00000035G <strong>ETC</strong></a
-      >
-    </div>
-    <h3>Native Navigation to ETC View Tab</h3>
-    <div>
-      <a
-        href="emxapp://EMX DEV/offline/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=402881af9c245871019c2461a03e0153&/EMX_OFFLINE=true"
-        >78L00000035G <strong>VIEW</strong></a
-      >
-    </div>
-    <div>
-      <a
-        href="emxapp://QAJBWF15/offline/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=8a8193cd9c5577e2019c56ab8b3b23b9&/EMX_OFFLINE=true"
-        >QA15_08C50027006 <strong>VIEW</strong></a
-      >
-    </div> -->
   </body>
 </html>
