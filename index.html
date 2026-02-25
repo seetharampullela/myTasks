@@ -41,7 +41,7 @@
   </head>
   <body>
     <script>
-      function generateLink(id, action, env) {
+      function generateLink(id, action, env, mode) {
         let envString = env.replace("EMXFC_", "");
         if (env == "") {
           envString = "QAJBWF15";
@@ -49,10 +49,20 @@
         if (!id || !action) {
           return null;
         }
+        let baseViewURL = `emxapp://${envString}`;
+        const viewURL =
+          mode == "offline"
+            ? `/offline/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`
+            : `/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`;
+
+        const etcURL =
+          mode == "offline"
+            ? `/offline/xl/esTaskExecution/routineWorkTaskCard.ajax?service_lookup=initialize&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`
+            : `/xl/esTaskExecution/routineWorkTaskCard.ajax?service_lookup=initialize&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`;
         if (action === "view") {
-          return `emxapp://${envString}/offline/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`;
+          return `${baseViewURL}${viewURL}`;
         } else if (action === "etc") {
-          return `emxapp://${envString}/offline/xl/esTaskExecution/routineWorkTaskCard.ajax?service_lookup=initialize&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`;
+          return `${baseViewURL}${etcURL}`;
         } else {
           alert("Please enter taskCardId and action");
         }
@@ -62,8 +72,9 @@
         const env =
           document.getElementById("envInput").value.toUpperCase() ?? null;
         const action = document.getElementById("actionSelect").value;
+        const mode = document.getElementById("modeSelect").value;
 
-        const result = generateLink(id, action, env);
+        const result = generateLink(id, action, env, mode);
 
         const container = document.getElementById("generatedLinkContainer");
         container.innerHTML = "";
@@ -76,7 +87,7 @@
           container.appendChild(link);
         } else {
           container.innerHTML =
-            "<p style='color:red;'>Please enter ID and select Action</p>";
+            "<p style='color:red;'>Please enter Task Card Id and select Action</p>";
         }
       }
     </script>
@@ -86,6 +97,13 @@
     <input type="text" id="idInput" placeholder="Enter Task Card Id" />
     <br />
     <span class="comment">Please enter only User Assigned Task Card Id</span>
+    <br /><br />
+    <label for="modeSelect" id="modeSelectLable">Mode:</label>
+    <select id="modeSelect">
+      <option value="">-- Select Mode --</option>
+      <option value="online">Online Screen</option>
+      <option value="offline">Offline Screen</option>
+    </select>
     <br /><br />
     <label for="actionSelect" id="label">Action:</label>
     <select id="actionSelect">
@@ -99,14 +117,18 @@
     <br /><br />
     <strong
       >Note:
+      <br />
       <span>
-        If the environment field is not supplied, it will be defaulted to
+        1. If the environment field is not supplied, it will be defaulted to
         QAJBWF15
-      </span></strong
-    >
+      </span>
+      <br />
+      <span> 2. Mode offline is for native UI, and online is for webUI. </span>
+    </strong>
     <br /><br />
     <button onclick="handleSubmit()">Submit</button>
     <br /><br />
+
     <div id="generatedLinkContainer"></div>
   </body>
 </html>
