@@ -40,7 +40,7 @@
     <title>EmpowerMX</title>
   </head>
   <body>
-    <script>
+    <!-- <script>
       function generateLink(id, action, env, mode) {
         let envString = env.replace("EMXFC_", "");
         if (env == "") {
@@ -90,8 +90,81 @@
             "<p style='color:red;'>Please enter Task Card Id and select Action</p>";
         }
       }
-    </script>
+    </script> -->
 
+    <script>
+      function generateLink(id, action, env, mode) {
+        let envString = env.replace("EMXFC_", "");
+        if (env == "") {
+          envString = "QAJBWF15";
+        }
+
+        if (!id || !action) {
+          return null;
+        }
+
+        let baseViewURL = `emxapp://${envString}`;
+
+        const viewURL =
+          mode == "offline"
+            ? `/offline/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`
+            : `/xl/esTaskExecution/RetrieveEditRoutineTaskCard.ajax?action_forward=view&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`;
+
+        const etcURL =
+          mode == "offline"
+            ? `/offline/xl/esTaskExecution/routineWorkTaskCard.ajax?service_lookup=initialize&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`
+            : `/xl/esTaskExecution/routineWorkTaskCard.ajax?service_lookup=initialize&/taskCardRoot/taskCard/@taskCardId=${id}&/EMX_OFFLINE=true`;
+
+        if (action === "view") {
+          return `${baseViewURL}${viewURL}`;
+        } else if (action === "etc") {
+          return `${baseViewURL}${etcURL}`;
+        } else {
+          alert("Please enter taskCardId and action");
+        }
+      }
+
+      function handleSubmit() {
+        const rawIds = document.getElementById("idInput").value.trim();
+
+        const env =
+          document.getElementById("envInput").value.toUpperCase() ?? null;
+
+        const action = document.getElementById("actionSelect").value;
+        const mode = document.getElementById("modeSelect").value;
+
+        const container = document.getElementById("generatedLinkContainer");
+        container.innerHTML = "";
+
+        if (!rawIds || !action) {
+          container.innerHTML =
+            "<p style='color:red;'>Please enter Task Card Id(s) and select Action</p>";
+          return;
+        }
+
+        // Split by comma, space, or newline
+        const ids = rawIds.split(/[\s,]+/).filter(Boolean);
+
+        const list = document.createElement("ul");
+
+        ids.forEach((id) => {
+          const result = generateLink(id, action, env, mode);
+
+          if (result) {
+            const li = document.createElement("li");
+
+            const link = document.createElement("a");
+            link.href = result;
+            link.textContent = `Open TaskCard ${id}`;
+
+            li.appendChild(link);
+            list.appendChild(li);
+          }
+        });
+
+        container.appendChild(list);
+      }
+    </script>
     <h1>My Tasks</h1>
     <label for="idInput" id="label">Task Card Id</label>
     <input type="text" id="idInput" placeholder="Enter Task Card Id" />
